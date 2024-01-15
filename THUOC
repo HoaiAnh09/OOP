@@ -1,0 +1,148 @@
+#include<iostream>
+#include<vector>
+#include<string>
+#include<algorithm>
+using namespace std;
+class Thuoc{
+    private:
+        string MaThuoc,TenThuoc,HangThuoc;
+        double Gia;
+    public:
+        Thuoc():MaThuoc("0"),TenThuoc("0"),HangThuoc("0"),Gia(0.0){}
+        Thuoc(string nMaThuoc,string nTenThuoc,string nHangThuoc,double nGia):MaThuoc(nMaThuoc),TenThuoc(nTenThuoc),HangThuoc(nHangThuoc),Gia(nGia){}
+        
+        string getMaThuoc()const{
+            return MaThuoc;
+        }
+        string getTenThuoc()const{
+            return TenThuoc;
+        }
+        string getHangThuoc()const{
+            return HangThuoc;
+        }
+        int getGia()const{
+            return Gia;
+        }
+        void setMaThuoc(string value){
+            MaThuoc=value;
+        }
+        void setTenThuoc(string value){
+            TenThuoc=value;
+        }
+        void setHangThuoc(string value){
+            HangThuoc=value;
+        }
+        void setGia(int value){
+            Gia = value;
+        }
+        
+        virtual void nhap(){
+            cout<<"\tNhap ma thuoc: ";
+            cin.ignore();getline(cin,MaThuoc);
+            cout<<"\tNhap ten thuoc: ";
+            cin.ignore();getline(cin,TenThuoc);
+            cout<<"\tNhap hang thuoc: ";
+            cin.ignore();getline(cin,HangThuoc);
+            cout<<"\tNhap gia: ";
+            cin>>Gia;
+        }
+        virtual void xuat(){
+            cout<<"Ma Thuoc: "<<MaThuoc<<"| "<<"Ten Thuoc: "<<TenThuoc<<"| "<<"Hang Thuoc: "<<HangThuoc<<"| "<<"Gia: "<<Gia<<"| ";
+        }
+        friend bool operator == (Thuoc x,Thuoc y);
+};
+bool operator ==(Thuoc x,Thuoc y){
+    return x.getMaThuoc()==y.getMaThuoc();
+}
+class ThuocBo:public Thuoc{
+    private:
+        string CongDung;
+    public:
+        ThuocBo():CongDung("0"){}
+        ThuocBo(string nMaThuoc,string nTenThuoc,string nHangThuoc,double nGia,string nCongDung):Thuoc(nMaThuoc,nTenThuoc,nHangThuoc,nGia),CongDung(nCongDung){}
+        
+        string getCongDung()const{
+            return CongDung;
+        }
+        void setCongDung(string value){
+            CongDung = value;
+        }
+        
+        void nhap()override{
+            Thuoc::nhap();
+            cin.ignore();
+            cout<<"\tNhap cong dung: ";
+            cin.ignore();getline(cin,CongDung);
+            
+        }
+        void xuat()override{
+            Thuoc::xuat();
+            cout<<"Cong Dung: "<<CongDung<<"| "<<endl;
+        }
+      // ~ThuocBo();
+};
+class KhangSinh:public Thuoc{
+    private:
+        string HamLuongSD;
+    public:
+        KhangSinh():HamLuongSD("0"){}
+        KhangSinh(string nMaThuoc,string nTenThuoc,string nHangThuoc,double nGia,string nCongDung,string nHamLuongSD):Thuoc(nMaThuoc,nTenThuoc,nHangThuoc,nGia),HamLuongSD(nHamLuongSD){}
+        
+        string getHamLuongSD()const{
+            return HamLuongSD;
+        }
+        void setHamLuongSD(string value){
+            HamLuongSD=value;
+        }
+        
+        void nhap()override{
+            Thuoc::nhap();
+            cin.ignore();
+            cout<<"\tNhap ham luong su dung: ";
+            cin.ignore();getline(cin,HamLuongSD);
+        }
+        void xuat()override{
+            Thuoc::xuat();
+            cout<<"Ham Luong SD: "<<HamLuongSD<<"| "<<endl;
+        }
+        //~KhangSinh();
+};
+void ChuongTrinhChinh(){
+    int soLuong,LoaiThuoc;
+    cout<<"Nhap so luong thuoc: ";
+    cin>>soLuong;
+    
+    vector<Thuoc*>DanhSachThuoc;
+        cout<<"1.Thuoc bo"<<endl;
+        cout<<"2.Khang sinh"<<endl;
+        cout<<"Chon loai thuoc muon nhap: ";
+        cin>>LoaiThuoc;
+    
+        if(LoaiThuoc==1){
+            for(int i=0;i<soLuong;i++){
+                ThuocBo tb;
+                cout<<"Nhap thuoc bo thu "<<i+1<<": "<<endl;
+                tb.nhap();
+                DanhSachThuoc.push_back(new ThuocBo(tb));
+            }
+        }
+        else if(LoaiThuoc==2){
+             for(int i=0;i<soLuong;i++){
+                 KhangSinh ks;
+                 cout<<"Nhap khang sinh thu "<<i+1<<": "<<endl;
+                 ks.nhap();
+                 DanhSachThuoc.push_back(new KhangSinh(ks));
+             }
+        }
+        cout<<"====DANH SACH THUOC===="<<endl;
+         for(int i=0;i<DanhSachThuoc.size();i++){
+             DanhSachThuoc[i]->xuat();
+             cout<<endl;
+        }
+        //tim kiem
+       
+}
+int main(){
+    ChuongTrinhChinh();
+    return 0;
+}
