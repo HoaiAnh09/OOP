@@ -20,7 +20,7 @@ class Thuoc{
         string getHangThuoc()const{
             return HangThuoc;
         }
-        int getGia()const{
+        double getGia()const{
             return Gia;
         }
         void setMaThuoc(string value){
@@ -51,7 +51,7 @@ class Thuoc{
         }
         friend bool operator == (Thuoc x,Thuoc y);
 };
-bool operator ==(Thuoc x,Thuoc y){
+bool operator == (Thuoc x,Thuoc y){
     return x.getMaThuoc()==y.getMaThuoc();
 }
 class ThuocBo:public Thuoc{
@@ -60,7 +60,7 @@ class ThuocBo:public Thuoc{
     public:
         ThuocBo():CongDung("0"){}
         ThuocBo(string nMaThuoc,string nTenThuoc,string nHangThuoc,double nGia,string nCongDung):Thuoc(nMaThuoc,nTenThuoc,nHangThuoc,nGia),CongDung(nCongDung){}
-        
+        ~ThuocBo(){}
         string getCongDung()const{
             return CongDung;
         }
@@ -79,7 +79,7 @@ class ThuocBo:public Thuoc{
             Thuoc::xuat();
             cout<<"Cong Dung: "<<CongDung<<"| "<<endl;
         }
-      // ~ThuocBo();
+        
 };
 class KhangSinh:public Thuoc{
     private:
@@ -87,7 +87,7 @@ class KhangSinh:public Thuoc{
     public:
         KhangSinh():HamLuongSD("0"){}
         KhangSinh(string nMaThuoc,string nTenThuoc,string nHangThuoc,double nGia,string nCongDung,string nHamLuongSD):Thuoc(nMaThuoc,nTenThuoc,nHangThuoc,nGia),HamLuongSD(nHamLuongSD){}
-        
+        ~KhangSinh(){}
         string getHamLuongSD()const{
             return HamLuongSD;
         }
@@ -105,42 +105,83 @@ class KhangSinh:public Thuoc{
             Thuoc::xuat();
             cout<<"Ham Luong SD: "<<HamLuongSD<<"| "<<endl;
         }
-        //~KhangSinh();
+        
 };
+
 void ChuongTrinhChinh(){
     int soLuong,LoaiThuoc;
     cout<<"Nhap so luong thuoc: ";
     cin>>soLuong;
     
     vector<Thuoc*>DanhSachThuoc;
+    for(int i=0;i<soLuong;i++){
         cout<<"1.Thuoc bo"<<endl;
         cout<<"2.Khang sinh"<<endl;
         cout<<"Chon loai thuoc muon nhap: ";
         cin>>LoaiThuoc;
     
         if(LoaiThuoc==1){
-            for(int i=0;i<soLuong;i++){
-                ThuocBo tb;
-                cout<<"Nhap thuoc bo thu "<<i+1<<": "<<endl;
-                tb.nhap();
-                DanhSachThuoc.push_back(new ThuocBo(tb));
-            }
+            ThuocBo tb;
+            tb.nhap();
+            DanhSachThuoc.push_back(new ThuocBo(tb));
+            
         }
-        else if(LoaiThuoc==2){
-             for(int i=0;i<soLuong;i++){
-                 KhangSinh ks;
-                 cout<<"Nhap khang sinh thu "<<i+1<<": "<<endl;
-                 ks.nhap();
-                 DanhSachThuoc.push_back(new KhangSinh(ks));
-             }
+        if(LoaiThuoc==2) {
+            KhangSinh ks;
+            ks.nhap();
+            DanhSachThuoc.push_back(new KhangSinh(ks));
+            
         }
+        if(LoaiThuoc!=1 &LoaiThuoc!=2){
+            cout<<"Khong hop le!Vui long nhap lai!"<<endl;
+            i--;
+        }
+    }
         cout<<"====DANH SACH THUOC===="<<endl;
-         for(int i=0;i<DanhSachThuoc.size();i++){
-             DanhSachThuoc[i]->xuat();
-             cout<<endl;
+        for(int i=0;i<DanhSachThuoc.size();i++){
+            DanhSachThuoc[i]->xuat();
+            cout<<endl;
         }
         //tim kiem
-       
+        cout<<"1.Thuoc bo"<<endl;
+        cout<<"2.Khang sinh"<<endl;
+        cout<<"Nhap loai thuoc muon nhap them: ";
+        cin>>LoaiThuoc;
+        if(LoaiThuoc==1){
+            int dem =0;
+            ThuocBo tb;
+            Thuoc* ptrtb=&tb;
+            tb.nhap();
+            for(int i=0;i<DanhSachThuoc.size();i++){
+                if(*ptrtb==*DanhSachThuoc[i]){
+                    cout<<"Da co thuoc bo trong danh sach!"<<endl;
+                    dem++;
+                    break;
+                }
+            }if(dem==0){
+                cout<<"Chua co thuoc bo trong danh sach! Da them vao danh sach!"<<endl;
+                DanhSachThuoc.push_back(new ThuocBo(tb));
+            }
+        }else{
+            int dem =0;
+            KhangSinh ks;
+            KhangSinh* ptrks=&ks;
+            ks.nhap();
+            for(int i=0;i<DanhSachThuoc.size();i++){
+                if(*ptrks==*DanhSachThuoc[i]){
+                    cout<<"Da co khang sinh trong danh sach!"<<endl;
+                    dem++;
+                    break;
+                }
+            }if(dem==0){
+                cout<<"Chua co khang sinh trong danh sach!Da them vao danh sach!"<<endl;
+                DanhSachThuoc.push_back(new KhangSinh(ks));
+            }
+        }
+       cout<<"====DANH SACH SAU KHI THEM THUOC MOI===="<<endl;
+       for(int i=0;i<DanhSachThuoc.size();i++){
+        DanhSachThuoc[i]->xuat();
+       }
 }
 int main(){
     ChuongTrinhChinh();
