@@ -1,0 +1,15 @@
+using System;
+namespace TinhTuoi{
+    class Program{
+        static void Main(string[] args){
+        Console.Write("Nhap ten: ");
+        string name = Console.ReadLine();
+        Console.Write("Nhap nam sinh: ");
+        int year = Convert.ToInt32(Console.ReadLine());
+        var today = DateTime.Today;
+        int tuoi = today.Year - year;
+        Console.Write("Xin chao "+ name + ", ban "+ tuoi +" tuoi");
+        }
+        
+    }
+}
